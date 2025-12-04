@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IoT Monitor Dapur</title>
+    
+    <!-- CSS & Fonts -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+    <div class="d-flex" id="wrapper">
+        <!-- SIDEBAR -->
+        <div class="bg-white border-end" id="sidebar-wrapper">
+            <div class="sidebar-heading text-center py-4 primary-text fs-4 fw-bold text-uppercase border-bottom">
+                <i class="bi bi-fire me-2"></i>Dapur Pintar
+            </div>
+            <div class="list-group list-group-flush my-3">
+                <a href="#" onclick="showPage('dashboard')" id="menu-dashboard" class="list-group-item list-group-item-action bg-transparent second-text active">
+                    <i class="bi bi-grid-fill me-2"></i>Dashboard
+                </a>
+                <a href="#" onclick="showPage('logs')" id="menu-logs" class="list-group-item list-group-item-action bg-transparent second-text">
+                    <i class="bi bi-journal-text me-2"></i>Data Logs
+                </a>
+            </div>
+        </div>
+
+        <!-- PAGE CONTENT -->
+        <div id="page-content-wrapper">
+            <!-- Navbar (Status sudah dihapus dari sini biar bersih) -->
+            <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-list fs-3 me-3" id="menu-toggle" style="cursor: pointer;"></i>
+                    <h2 class="fs-2 m-0 fw-bold" id="page-title">Dashboard Utama</h2>
+                </div>
+            </nav>
+
+            <div class="container-fluid px-4">
+
+                <!-- DASHBOARD VIEW -->
+                <div id="view-dashboard" class="page-section fade-in">
+                    
+                    <!-- KONTROL PANEL (YANG BARU DIGABUNG) -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="bg-white shadow-sm rounded p-4 border-start border-5 border-primary">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    
+                                    <!-- Bagian Kiri: Info Status -->
+                                    <div class="d-flex align-items-center">
+                                        <!-- Ikon Status Berubah Warna -->
+                                        <div id="status-icon-bg" class="rounded-circle bg-secondary bg-opacity-10 p-3 me-3 text-secondary">
+                                            <i class="bi bi-wifi-off fs-2" id="status-icon"></i>
+                                        </div>
+                                        <div>
+                                            <p class="mb-0 text-muted small">Status Koneksi</p>
+                                            <h4 class="fw-bold mb-0" id="connection-text">Terputus...</h4>
+                                        </div>
+                                    </div>
+
+                                    <!-- Bagian Kanan: Tombol On/Off -->
+                                    <div class="d-flex align-items-center bg-light px-4 py-2 rounded-pill">
+                                        <span class="fw-bold me-3 text-muted" id="led-txt">OFF</span>
+                                        <div class="form-check form-switch m-0">
+                                            <!-- Tombol disabled dulu sebelum konek -->
+                                            <input class="form-check-input" type="checkbox" id="btn-toggle" disabled style="width: 3.5em; height: 1.75em; cursor: pointer;">
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sensor Cards -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <div class="p-4 bg-white shadow-sm d-flex justify-content-around align-items-center rounded card-hover">
+                                <div><h3 class="fs-2" id="val-suhu">--</h3><p class="fs-5 text-muted">Suhu (°C)</p></div>
+                                <i class="bi bi-thermometer-half fs-1 text-primary border rounded-full bg-light p-3"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-4 bg-white shadow-sm d-flex justify-content-around align-items-center rounded card-hover">
+                                <div><h3 class="fs-2" id="val-hum">--</h3><p class="fs-5 text-muted">Kelembapan (%)</p></div>
+                                <i class="bi bi-droplet fs-1 text-info border rounded-full bg-light p-3"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-4 bg-white shadow-sm d-flex justify-content-around align-items-center rounded card-hover">
+                                <div><h3 class="fs-2" id="val-gas">--</h3><p class="fs-5 text-muted">Gas (PPM)</p></div>
+                                <i class="bi bi-wind fs-1 text-warning border rounded-full bg-light p-3"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Grafik -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="bg-white shadow-sm rounded p-4">
+                                <h5 class="fw-bold mb-3">Grafik Real-time</h5>
+                                <canvas id="myChart" style="max-height: 300px;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LOGS VIEW -->
+                <div id="view-logs" class="page-section fade-in" style="display: none;">
+                    <!-- Rekap Harian -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4"><div class="card bg-primary text-white p-3 border-0 shadow-sm"><h6 class="text-white-50">Max Suhu Hari Ini</h6><h2 class="fw-bold mb-0"><span id="log-max-temp">0</span>°C</h2></div></div>
+                        <div class="col-md-4"><div class="card bg-danger text-white p-3 border-0 shadow-sm"><h6 class="text-white-50">Alert Gas Hari Ini</h6><h2 class="fw-bold mb-0"><span id="log-gas-alert">0</span>x</h2></div></div>
+                        <div class="col-md-4"><div class="card bg-success text-white p-3 border-0 shadow-sm"><h6 class="text-white-50">Total Data Masuk</h6><h2 class="fw-bold mb-0"><span id="log-count">0</span></h2></div></div>
+                    </div>
+                    <!-- Tabel -->
+                    <div class="bg-white shadow-sm rounded p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold">Riwayat Data (20 Terakhir)</h5>
+                            <button id="btn-export" class="btn btn-outline-success btn-sm"><i class="bi bi-file-excel"></i> Export Excel</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-light"><tr><th>Waktu</th><th>Suhu</th><th>Kelembapan</th><th>Gas</th><th>Status</th></tr></thead>
+                                <tbody id="table-body"><tr><td colspan="5" class="text-center text-muted">Memuat data...</td></tr></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Script UI Sederhana -->
+    <script>
+        function showPage(pageName) {
+            document.getElementById('view-dashboard').style.display = 'none';
+            document.getElementById('view-logs').style.display = 'none';
+            document.getElementById('menu-dashboard').classList.remove('active');
+            document.getElementById('menu-logs').classList.remove('active');
+            document.getElementById('view-' + pageName).style.display = 'block';
+            document.getElementById('menu-' + pageName).classList.add('active');
+            document.getElementById('page-title').innerText = pageName === 'dashboard' ? 'Dashboard Utama' : 'Riwayat Data Sensor';
+        }
+        document.getElementById("menu-toggle").onclick = function () { document.getElementById("wrapper").classList.toggle("toggled"); };
+    </script>
+
+    <!-- Logic Utama -->
+    <script type="module" src="assets/js/app.js"></script>
+</body>
+</html>
