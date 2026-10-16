@@ -1,8 +1,16 @@
+![banner](docs/banner.png)
+
 # IoT Monitor Dapur – Dashboard Web
 
 Dashboard web ringan untuk memantau sensor dapur (**suhu, kelembapan, gas**) secara real-time dari **Firebase Realtime Database**, dengan grafik tren dan log kejadian.
 
-> 📷 Screenshot: tambahkan `docs/dashboard.png` lalu tampilkan di sini.
+![Dashboard utama: status koneksi, nilai sensor, grafik real-time](docs/iot_dashboard.png)
+*Dashboard utama: status koneksi, nilai sensor, grafik real-time*
+
+![Riwayat data sensor dengan penanda bahaya gas](docs/iot_logs.png)
+*Riwayat data sensor dengan penanda bahaya gas*
+
+<sub>Screenshot memakai data simulasi.</sub>
 
 ## Fitur
 
