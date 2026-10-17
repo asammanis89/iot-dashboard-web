@@ -21,12 +21,12 @@ Dashboard web ringan untuk memantau sensor dapur (**suhu, kelembapan, gas**) sec
 
 ## Tech stack
 
-HTML · CSS · JavaScript · Bootstrap 5 · Chart.js · Firebase Realtime Database
+HTML, CSS, JavaScript, Bootstrap 5, Chart.js, Firebase Realtime Database
 
 ## Struktur data Firebase
 
 ```
-Dapur/Suhu · Dapur/Kelembapan · Dapur/Gas · Dapur/Status
+Dapur/Suhu, Dapur/Kelembapan, Dapur/Gas, Dapur/Status
 logs/
 ```
 
@@ -37,6 +37,6 @@ logs/
 
 > Kunci web Firebase memang bersifat publik. Yang melindungi data adalah **aturan Realtime Database**, jadi pastikan `.read`/`.write` tidak terbuka untuk semua orang.
 
-## Pengembang
+---
 
-**Ardha Febrian Muqorrobin** – WhatsApp 081217529861 · [LinkedIn](https://www.linkedin.com/in/ardha-febrian-342317289/)
+Dibuat oleh Ardha Febrian. Portofolio dan kontak: [asammanis89.github.io](https://asammanis89.github.io), WhatsApp [0857-5517-1491](https://wa.me/6285755171491).
